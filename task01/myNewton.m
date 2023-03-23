@@ -69,13 +69,25 @@ if strcmp(livePlot,'on')
 end
 xOld = x0;
 abortFlag = 'maxIter';
+
+if ~exist('dfunc', 'var')
+    methodByUserInput = questdlg("Which Method shall be used?", "Derivation Method Selector", 'forwardDiff', 'reverseDiff' , 'centralDiff', 'centralDiff')
+end
+
 for i = 1:maxIter
     f = func(xOld);
     if abs(f) < feps
         abortFlag = 'feps';
         break;
     end
-    df = dfunc(xOld);
+    
+    if exist('dfunc', 'var')
+        df = dfunc(xOld);
+    else
+        df = numDiff(func, xOld, methodByUserInput)
+    end
+    
+    
     if df == 0
         abortFlag = 'df = 0';
         break;
