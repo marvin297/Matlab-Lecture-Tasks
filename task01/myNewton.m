@@ -1,4 +1,48 @@
 function [xZero, abortFlag, iters] = myNewton(varargin)
+% myNewton - The function estimates the zero cross point by using Newtons
+% algorithm
+%
+% Syntax:  [xZero, abortFlag, iters] = myNewton('function', func, 
+%           'derivative', dfunc, 'startValue', x0, 'maxIter', maxIter,
+%           'feps', feps, 'xeps', xeps, 'livePlot', livePlot)
+%
+% Inputs:
+%       'function' func: A function for finding the zero cross point of it
+%       'derivative', dfunc (optional): Derivative of above function. When
+%       not provided, the zero cross point will be calculated numerically.
+%       'startValue', x0 (optional): First guess of where a zero crossing
+%       point might be located. Default 0.
+%       'maxIter', maxIter (optional): Maximum count of iterations. Default
+%       50.
+%       feps', feps (optional): Uncertainity of function value. Default: 10^-6
+%       'xeps', xeps (optional): Uncertainity of first guessed x value.
+%       Default: 10^-6.
+%       'livePlot', livePlot (optional): Show the function and algorithm in
+%       real time as it runs. Default: 'off'.
+%
+% Outputs:
+%    xZero: Approximated x-Position after Newtons algorithm is terminated.
+%    abortFlag: Retuerns the reason why the algorithm has been aborted.
+%    iters: Total count of iterations
+%
+% Example: 
+%    
+%   >> [x, flag, iters] = myNewton('function', @(x) x^2, 'startValue', 1)
+%
+% Other m-files required: numDiff.m
+% Subfunctions: none
+% MAT-files required: numDiff.m
+%
+% See also: numDiff.m
+%
+% Author: Marvin G
+% Work address: none
+% email: inf21168@lehre.dhbw-stuttgart.de
+% Website: none
+% March 2023; Last revision: 28-Mar-2023
+
+%------------- BEGIN CODE --------------
+
 %% do the varargin
 for i = 1:nargin
     if strcmp(varargin{i},'function')
@@ -107,3 +151,4 @@ end
 iters = i;
 xZero = xNew;
 end
+% ------------- END OF CODE --------------
