@@ -53,10 +53,26 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             
             % ========= YOUR CODE HERE =========
             % compute the costs for each theta_vals tuple
+            [theta0, theta1] = meshgrid(theta0_vals, theta1_vals);
+            J_vals = zeros(length(theta0_vals), length(theta1_vals));
+            for i = 1:length(theta0_vals)
+                for j = 1:length(theta1_vals)
+                    obj.setTheta(theta0(i), theta1(j));
+                    J_vals(i,j) = obj.costFunction();
+                end
+            end
             % plot the costs with the contour command
-            % add x and y label
-            % add the optimum theta value to the plot (red X, MarkerSize: 10, LineWidth: 2)
+            contour(theta0, theta1, J_vals, 20);
             
+            % add x and y label
+            xlabel('theta_0'); 
+            ylabel('theta_1');
+            title('Optimum Contour');
+
+            % add the optimum theta value to the plot (red X, MarkerSize: 10, LineWidth: 2)
+            hold on
+            plot(obj.thetaOptimum(1), obj.thetaOptimum(2), 'rx', 'MarkerSize', 10, 'LineWidth', 2)
+
         end
         
         function h = showCostFunctionArea(obj)
@@ -68,16 +84,18 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             % compute the costs for each theta_vals tuple
             % plot the costs with the surf command
             % add x and y label
-            [theta0, theta1] = meshgrid(theta0_vals, theta1_vals);
+            %[theta0, theta1] = meshgrid(theta0_vals, theta1_vals);
             J_vals = zeros(length(theta0_vals), length(theta1_vals));
             for i = 1:length(theta0_vals)
-                for j = 1:length(theta1_vals)
-                    t = [theta0(i,j); theta1(i,j)];
-                    obj.setTheta(t(1), t(2));
+                for j = 1:length(theta0_vals)
+                    obj.setTheta(theta0_vals(i), theta1_vals(j));
                     J_vals(i,j) = obj.costFunction();
                 end
             end
-            
+            surf(theta0_vals, theta1_vals, J_vals);
+            xlabel('\theta_0');
+            ylabel('\theta_1');
+            zlabel('Cost Function');
         end
         
         function h = showTrainingData(obj)
@@ -92,10 +110,14 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
         function h = showModel(obj)
            h = obj.showTrainingData();
            
-           % ========= YOUR CODE HERE =========
            % add the final trained model plot to the figure ('b-')
+           hold on;
+           x_values = linspace(min(obj.trainingData.feature), max(obj.trainingData.feature), 100);
+           y_values = obj.thetaOptimum(1) + obj.thetaOptimum(2) * x_values;
+           plot(x_values, y_values, 'b-', 'LineWidth', 2);
            % update the legend
-           
+           legend('Training Data', 'Trained Model');
+
         end
         
         function setTheta(obj,theta0,theta1)
