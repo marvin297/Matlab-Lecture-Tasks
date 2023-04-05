@@ -34,7 +34,7 @@ classdef GradientDescentOptimizer < matlab.mixin.SetGet
             %   update theta property of linearRegressionModel (we want to call the cost function in the next step)
                 linearRegressionModel.setTheta(theta(1),theta(2))
             %   compute current costs and save them to costOverIters
-            costOverIters(i) = linearRegressionModel.costFunction();
+                costOverIters(i) = linearRegressionModel.costFunction();
             
             end
             

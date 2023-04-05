@@ -1,7 +1,30 @@
 classdef LinearRegressionModel < matlab.mixin.SetGet
     %LINEARREGRESSIONMODEL 
     % Class representing an implementation of linear regression model
-    
+
+    %------------------------------------------------------------------
+    % LinearRegressionModel - a class representing an implementation of 
+    % linear regression model
+    %
+    % LinearRegressionModel properties:
+    %   optimizer: optimizer object that's used for model training
+    %   trainingData: object contains the training data
+    %   theta: vector of coefficients for the model
+    %   thetaOptimum: vector of optimum model coefficients
+    %
+    % LinearRegressionModel Methods:
+    %   LinearRegressionModel - instance of the class
+    %   costFunction          - cost functoin calculation
+    %   hypothesis            - calc hypothesis values
+    %   showOptimumInContour  - display optimum value in a contour plot
+    %   showCostFunctionArea  - display the cost function area in a 3-dim plot
+    %   showTrainingData      - display the training data in a plot
+    %   showModel             - display the trained model in a plot
+    %   setTheta              - Set theta vector
+    %   setThetaOptimum       - Set optimum theta vector
+    %
+    %------------------------------------------------------------------
+
     properties (Access = public)
         optimizer
         trainingData
@@ -72,7 +95,6 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             % add the optimum theta value to the plot (red X, MarkerSize: 10, LineWidth: 2)
             hold on
             plot(obj.thetaOptimum(1), obj.thetaOptimum(2), 'rx', 'MarkerSize', 10, 'LineWidth', 2)
-
         end
         
         function h = showCostFunctionArea(obj)
