@@ -13,15 +13,15 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
     %   thetaOptimum: vector of optimum model coefficients
     %
     % LinearRegressionModel Methods:
-    %   LinearRegressionModel - instance of the class
-    %   costFunction          - cost functoin calculation
-    %   hypothesis            - calc hypothesis values
-    %   showOptimumInContour  - display optimum value in a contour plot
-    %   showCostFunctionArea  - display the cost function area in a 3-dim plot
-    %   showTrainingData      - display the training data in a plot
-    %   showModel             - display the trained model in a plot
-    %   setTheta              - Set theta vector
-    %   setThetaOptimum       - Set optimum theta vector
+    %   LinearRegressionModel: instance of the class
+    %   costFunction: cost functoin calculation
+    %   hypothesis: calc hypothesis values
+    %   showOptimumInContour: display optimum value in a contour plot
+    %   showCostFunctionArea: display the cost function area in a 3-dim plot
+    %   showTrainingData: display the training data in a plot
+    %   showModel: display the trained model in a plot
+    %   setTheta: Set theta vector
+    %   setThetaOptimum: Set optimum theta vector
     %
     %------------------------------------------------------------------
 
@@ -61,7 +61,6 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
         function hValue = hypothesis(obj)
             X = [ones(obj.trainingData.numOfSamples,1) obj.trainingData.feature];
             
-            % ========= YOUR CODE HERE =========
             % compute the hypothesis values for each sample
             % therefore compute the matrix multiplication with X
             % this calculation can be done by one line of code
@@ -74,14 +73,13 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             theta0_vals = linspace(50, 150, 100);
             theta1_vals = linspace(0, 2, 100);
             
-            % ========= YOUR CODE HERE =========
             % compute the costs for each theta_vals tuple
             [theta0, theta1] = meshgrid(theta0_vals, theta1_vals);
             J_vals = zeros(length(theta0_vals), length(theta1_vals));
-            for i = 1:length(theta0_vals)
-                for j = 1:length(theta1_vals)
-                    obj.setTheta(theta0(i), theta1(j));
-                    J_vals(i,j) = obj.costFunction();
+            for index1 = 1:length(theta0_vals)
+                for index2 = 1:length(theta1_vals)
+                    obj.setTheta(theta0(index1), theta1(index2));
+                    J_vals(index1,index2) = obj.costFunction();
                 end
             end
             % plot the costs with the contour command
@@ -102,7 +100,6 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             theta0_vals = linspace(50, 150, 100);
             theta1_vals = linspace(0, 2, 100);
             
-            % ========= YOUR CODE HERE =========
             % compute the costs for each theta_vals tuple
             % plot the costs with the surf command
             % add x and y label

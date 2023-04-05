@@ -13,12 +13,12 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
     %   thetaOptimum: vector of optimum model coefficients
     %
     % LinearRegressionModel Methods:
-    %   LinearRegressionModel - instance of the class
-    %   costFunction          - cost functoin calculation
-    %   hypothesis            - calc hypothesis values
-    %   showOptimumInContour  - display optimum value in a contour plot
-    %   showCostFunctionArea  - display the cost function area in a 3-dim plot
-    %   showTrainingData      - display the training data in a plot
+    %   LinearRegressionModel: instance of the class
+    %   costFunction: cost functoin calculation
+    %   hypothesis: calc hypothesis values
+    %   showOptimumInContour: display optimum value in a contour plot
+    %   showCostFunctionArea: display the cost function area in a 3-dim plot
+    %   showTrainingData: display the training data in a plot
     %   showModel             - display the trained model in a plot
     %   setTheta              - Set theta vector
     %   setThetaOptimum       - Set optimum theta vector
