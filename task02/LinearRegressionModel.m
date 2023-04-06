@@ -74,16 +74,16 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             theta1_vals = linspace(0, 2, 100);
             
             % compute the costs for each theta_vals tuple
-            [theta0, theta1] = meshgrid(theta0_vals, theta1_vals);
-            J_vals = zeros(length(theta0_vals), length(theta1_vals));
-            for index1 = 1:length(theta0_vals)
-                for index2 = 1:length(theta1_vals)
-                    obj.setTheta(theta0(index1), theta1(index2));
-                    J_vals(index1,index2) = obj.costFunction();
+            [thetaX, thetaY] = meshgrid(theta0_vals, theta1_vals);
+            J_vals = zeros(height(theta1_vals), length(theta0_vals));
+            for indexX = 1:length(theta0_vals)
+                for indexY = 1:length(theta1_vals)
+                    obj.setTheta(thetaX(1, indexX), thetaY(indexY, 1));
+                    J_vals(indexY,indexX) = obj.costFunction();
                 end
             end
             % plot the costs with the contour command
-            contour(theta0, theta1, J_vals, 20);
+            contour(thetaX, thetaY, J_vals, 20);
             
             % add x and y label
             xlabel('theta_0'); 
@@ -103,12 +103,12 @@ classdef LinearRegressionModel < matlab.mixin.SetGet
             % compute the costs for each theta_vals tuple
             % plot the costs with the surf command
             % add x and y label
-            %[theta0, theta1] = meshgrid(theta0_vals, theta1_vals);
+            [thetaX, thetaY] = meshgrid(theta0_vals, theta1_vals);
             J_vals = zeros(length(theta0_vals), length(theta1_vals));
-            for i = 1:length(theta0_vals)
-                for j = 1:length(theta0_vals)
+            for i = 1:length(thetaX)
+                for j = 1:length(thetaY)
                     obj.setTheta(theta0_vals(i), theta1_vals(j));
-                    J_vals(i,j) = obj.costFunction();
+                    J_vals(j,i) = obj.costFunction();
                 end
             end
             surf(theta0_vals, theta1_vals, J_vals);
