@@ -1,4 +1,29 @@
 classdef Automobilfederung < handle
+%--------------------------------------------------------------------------------------
+%% Description:
+% This class is a simulation of an automobile suspension system.
+% It contains a set of properties, methods and functions that may be used
+% to simulate the behavior of the system over time.
+
+%% Properties:
+% c1: spring-constant of the wheel suspension
+% c2: spring constant of the car suspension
+% d2: damping constant of the car suspension
+% m1: mass of the wheel
+% m2: mass of the car
+% u: input function handle
+% A: system matrix
+% B: input matrix
+% tsimout: time output vector of the simulatiion
+% ysimout: state output matrix of the simulation
+
+%% Methods:
+% Automobilfederung: class constructor that initializes the properties of the class
+% sim: simulates the behavior of the system over time and updates tsimout and ysimout
+% visualizeResults: visiualize the simulation results with plots
+% calcInputMatixB: calculates the input matrix B
+% calcSystemMartixA: calculates the system matrix A
+%--------------------------------------------------------------------------------------
     properties
         c1 {mustBeNumeric}
         c2 {mustBeNumeric}
@@ -67,11 +92,18 @@ classdef Automobilfederung < handle
                 step = step + 1;
                 if t + h > tfinal
                     % ========= YOUR CODE HERE =========
-                    h = tfinal - t
+                    h = tfinal - t;
                 end
                 % ========= YOUR CODE HERE =========
                 % calculate the slopes
+                k1 = rhs(obj,t,y);
+                k2 = rhs(obj,t + (0.5*h), y+ ((h/2) * k1') );
+                k3 = rhs(obj,t + (0.5*h), y+ (0.5*h*k2') );
+                k4 = rhs(obj,t + h, y+ (h*k3'));
+
                 % calculate the ynew
+                ynew = y + (((k1'/6) + (k2'/3) + (k3'/3) + (k4'/6)) * h);
+
                 t = t + h;
                 y = ynew;
                 tout(step) = t;
@@ -102,11 +134,16 @@ classdef Automobilfederung < handle
     methods (Access = private)
         function calcInputMatixB(obj)
             % ========= YOUR CODE HERE =========
-            % obj.B = 
+            obj.B = [0; 0; 0; obj.c1 / obj.m1];
         end
         function calcSystemMartixA(obj)
             % ========= YOUR CODE HERE =========
-            % obj.A = 
+            obj.A = [0, 1, 0, 0;...             
+                    -obj.c2/obj.m2, -obj.d2/obj.m2; ...
+                    obj.c2/obj.m2, obj.d2/obj.m2;...
+                    0, 0, 0, 1;...
+                    obj.c2/obj.m1, obj.d2/obj.m1;...
+                    -(obj.c1+obj.c2)/obj.m1, -obj.d2/obj.m1];
         end
         function xdot = rhs(obj, t, x)
             x = x(:);
