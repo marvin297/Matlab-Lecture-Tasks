@@ -1,3 +1,9 @@
+% Author: Marvin Geiger, Jannik Wiessler
+% Work address: none
+% email: inf21168@lehre.dhbw-stuttgart.de
+% Website: none
+% May 2023; Last revision: 09-May-2023
+
 classdef Automobilfederung < handle
 %--------------------------------------------------------------------------------------
 %% Description:
@@ -21,8 +27,8 @@ classdef Automobilfederung < handle
 % Automobilfederung: class constructor that initializes the properties of the class
 % sim: simulates the behavior of the system over time and updates tsimout and ysimout
 % visualizeResults: visiualize the simulation results with plots
-% calcInputMatixB: calculates the input matrix B
-% calcSystemMartixA: calculates the system matrix A
+% calcInputMatrixB: calculates the input matrix B
+% calcSystemMatrixA: calculates the system matrix A
 %--------------------------------------------------------------------------------------
     properties
         c1 {mustBeNumeric}
@@ -59,8 +65,8 @@ classdef Automobilfederung < handle
                     warning("Invalid property: "+varargin{i});
                 end
             end
-            obj.calcSystemMartixA();
-            obj.calcInputMatixB();
+            obj.calcSystemMatrixA();
+            obj.calcInputMatrixB();
         end
         function sim(obj, varargin)
             t = 0;
@@ -79,7 +85,7 @@ classdef Automobilfederung < handle
                 elseif strcmp(varargin{i}, 'y0')
                     y = varargin{i + 1};
                 else
-                    warning("Property not recognized: "+varargin{i});
+                    warning("Invalid property: "+varargin{i});
                 end
                     
             end
@@ -96,13 +102,13 @@ classdef Automobilfederung < handle
                 end
                 % ========= YOUR CODE HERE =========
                 % calculate the slopes
-                k1 = rhs(obj,t,y);
-                k2 = rhs(obj,t + (0.5*h), y+ ((h/2) * k1') );
-                k3 = rhs(obj,t + (0.5*h), y+ (0.5*h*k2') );
-                k4 = rhs(obj,t + h, y+ (h*k3'));
+                k_1 = rhs(obj, t, y);
+                k_2 = rhs(obj, t + (0.5 * h), y + ((h / 2) * k_1') );
+                k_3 = rhs(obj, t + (0.5 * h), y + (0.5 * h * k_2') );
+                k_4 = rhs(obj, t + h, y + (h * 3'));
 
                 % calculate the ynew
-                ynew = y + (((k1'/6) + (k2'/3) + (k3'/3) + (k4'/6)) * h);
+                ynew = y + (((k_1' / 6) + (k_2' / 3) + (k_3' / 3) + (k_4' / 6)) * h);
 
                 t = t + h;
                 y = ynew;
@@ -120,7 +126,7 @@ classdef Automobilfederung < handle
             grid on;
             ylabel('Höhe in m');
             legend('Karosserie','Rad');
-            title("Position der Zustände | stepsize = "+num2str(obj.tsimout(2)-obj.tsimout(1)))
+            title("Position der Zustände | stepsize = " + num2str(obj.tsimout(2)-obj.tsimout(1)))
             subplot(2,1,2);
             plot(obj.tsimout,obj.ysimout(:,2),'s-',...
                  obj.tsimout,obj.ysimout(:,4),'x-')
@@ -128,22 +134,24 @@ classdef Automobilfederung < handle
             ylabel('Geschwindigkeit in m/s');
             xlabel('Simulationszeit in s');
             legend('Karosserie','Rad');
-            title("Geschwindigkeit der Zustände | stepsize = "+num2str(obj.tsimout(2)-obj.tsimout(1)))
+            title("Geschwindigkeit der Zustände | stepsize = " + num2str(obj.tsimout(2)-obj.tsimout(1)))
         end
     end
     methods (Access = private)
-        function calcInputMatixB(obj)
+        function calcInputMatrixB(obj)
             % ========= YOUR CODE HERE =========
+            % calculates the input matrix with c1 and m1
             obj.B = [0; 0; 0; obj.c1 / obj.m1];
         end
-        function calcSystemMartixA(obj)
+        function calcSystemMatrixA(obj)
             % ========= YOUR CODE HERE =========
-            obj.A = [0, 1, 0, 0;...             
-                    -obj.c2/obj.m2, -obj.d2/obj.m2; ...
-                    obj.c2/obj.m2, obj.d2/obj.m2;...
-                    0, 0, 0, 1;...
-                    obj.c2/obj.m1, obj.d2/obj.m1;...
-                    -(obj.c1+obj.c2)/obj.m1, -obj.d2/obj.m1];
+            % matrix obj.A is being used to model the behavior of the 
+            % car suspension system with two masses connected 
+            % by a spring and damper
+            obj.A = [0,             1,              0,             0;...             
+                    -obj.c2/obj.m2, -obj.d2/obj.m2, obj.c2/obj.m2, obj.d2/obj.m2;...
+                    0,              0,              0,             1;...
+                    obj.c2/obj.m1, obj.d2/obj.m1, -(obj.c1+obj.c2)/obj.m1, -obj.d2/obj.m1];
         end
         function xdot = rhs(obj, t, x)
             x = x(:);
